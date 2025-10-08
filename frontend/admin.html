@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Slot Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --info: #4895ef;
+            --warning: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --sidebar-width: 250px;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fb;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar */
+        #sidebar {
+            height: 100vh;
+            width: var(--sidebar-width);
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: var(--primary);
+            color: white;
+            transition: all 0.3s;
+            z-index: 1000;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        #sidebar .sidebar-header {
+            padding: 20px;
+            background: var(--secondary);
+        }
+        
+        #sidebar ul.components {
+            padding: 20px 0;
+        }
+        
+        #sidebar ul li a {
+            padding: 15px 25px;
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        #sidebar ul li a:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        #sidebar ul li a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        #sidebar ul li a i {
+            margin-right: 10px;
+        }
+        
+        /* Main Content */
+        #content {
+            width: calc(100% - var(--sidebar-width));
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            transition: all 0.3s;
+            padding: 20px 16px;
+        }
+        
+        /* Cards */
+        .stat-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            border: none;
+            height: 100%;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card .card-icon {
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
+        
+        /* Charts */
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        /* Tables */
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        /* Forms */
+        .form-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        
+        /* Badges */
+        .badge-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        /* Utilities */
+        .section-title {
+            border-left: 4px solid var(--primary);
+            padding-left: 10px;
+            margin: 20px 0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+    #sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 1050;
+    }
+
+    #sidebar.active {
+        transform: translateX(0);
+    }
+
+    #content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    #content.active {
+        filter: blur(2px);
+        pointer-events: none;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <script>
+        (function guard() {
+            const token = localStorage.getItem('authToken');
+            const role = localStorage.getItem('role');
+            if (!token || role !== 'admin') {
+                window.location.replace('login.html?role=admin');
+            }
+        })();
+    </script>
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>Slot Manager</h3>
+            <strong>SM</strong>
+        </div>
+
+        <ul class="list-unstyled">
+            <li>
+                <a href="#dashboard-section" class="active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="#manage-slots-section">
+                    <i class="fas fa-calendar-alt"></i> Manage Slots
+                </a>
+            </li>
+            <li>
+                <a href="#recentappointments">
+                    <i class="fas fa-clock"></i> Recent Appointments
+                </a>
+            </li>
+            <li>
+                <a href="#Reports">
+                    <i class="fas fa-chart-bar"></i> Reports
+                </a>
+            </li>
+          <li>
+  <a href="#" onclick="logout(); return false;">
+    <i class="fas fa-sign-out-alt"></i> Logout
+  </a>
+</li>
+
+        </ul>
+    </nav>
+
+    <!-- Content -->
+    <div id="content">
+        <!-- Top Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light rounded-3 mb-4">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="d-flex align-items-center">
+                    <div class="dropdown ms-3">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://via.placeholder.com/40" alt="Admin" width="32" height="32" class="rounded-circle me-2">
+                            <span>Admin User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownUser">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Sign out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section">
+            <h4 class="section-title">Dashboard Overview</h4>
+            
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title">Total Slots</h5>
+                                    <h2 class="card-text" id="total-slots">0</h2>
+                                </div>
+                                <div class="card-icon">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title">Booked Appointments</h5>
+                                    <h2 class="card-text" id="booked-appointments">0</h2>
+                                </div>
+                                <div class="card-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title">Available Slots</h5>
+                                    <h2 class="card-text" id="available-slots">0</h2>
+                                </div>
+                                <div class="card-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title">Pending Approvals</h5>
+                                    <h2 class="card-text" id="pending-appointments">0</h2>
+                                </div>
+                                <div class="card-icon">
+                                    <i class="fas fa-hourglass-half"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts -->
+             <section id="Reports">
+            <div class="row mb-4">
+                <div class="col-lg-8">
+                    <div class="chart-container">
+                        <h5 class="mb-3">Weekly Appointments</h5>
+                        <canvas id="weeklyAppointmentsChart" height="250"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="chart-container">
+                        <h5 class="mb-3">Slot Status</h5>
+                        <canvas id="slotStatusChart" height="250"></canvas>
+                    </div>
+                </div>
+            </div>
+            </section>
+            <!-- Recent Appointments -->
+             <section id="recentappointments">
+            <div class="table-container">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5>Recent Appointments</h5>
+                    <a href="#appointments" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Date & Time</th>
+                                <th>User Notes</th>
+                               <th>Admin Notes</th> 
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-appointments-table">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Create Slot Form -->
+        <section id="create-slot-section" class="form-container mt-5">
+            <h4 class="section-title">Create New Slot</h4>
+            <form id="create-slot-form">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="mb-3">
+                            <label for="startTime" class="form-label">Start Time</label>
+                            <input type="datetime-local" class="form-control" id="startTime" required>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="mb-3">
+                            <label for="endTime" class="form-label">End Time</label>
+                            <input type="datetime-local" class="form-control" id="endTime" required>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">Create Slot</button>
+                    </div>
+                </div>
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle"></i> Each slot must be exactly 30 minutes long. You can create up to 10 slots per day.
+                </div>
+            </form>
+        </section>
+        
+        <!-- Manage Slots Section -->
+        <section id="manage-slots-section" class="table-container mt-5">
+            <h4 class="section-title">Manage Slots</h4>
+            <div class="d-flex justify-content-between mb-3">
+                <div class="d-flex">
+                    <input type="date" class="form-control me-2" id="slot-date-filter" style="width: 200px;">
+                    <button class="btn btn-outline-primary" id="filter-slots-btn">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSlotModal">
+                    <i class="fas fa-plus"></i> New Slot
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="slots-table">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Create Slot Modal -->
+    <div class="modal fade" id="createSlotModal" tabindex="-1" aria-labelledby="createSlotModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createSlotModalLabel">Create New Slot</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modal-create-slot-form">
+                        <div class="mb-3">
+                            <label for="modal-startTime" class="form-label">Start Time</label>
+                            <input type="datetime-local" class="form-control" id="modal-startTime" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modal-endTime" class="form-label">End Time</label>
+                            <input type="datetime-local" class="form-control" id="modal-endTime" required>
+                        </div>
+                    </form>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Each slot must be exactly 30 minutes long.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="modal-create-slot-btn">Create Slot</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Slot Modal -->
+    <div class="modal fade" id="editSlotModal" tabindex="-1" aria-labelledby="editSlotModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSlotModalLabel">Edit Slot</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-slot-form">
+                        <input type="hidden" id="edit-slot-id">
+                        <div class="mb-3">
+                            <label for="edit-startTime" class="form-label">Start Time</label>
+                            <input type="datetime-local" class="form-control" id="edit-startTime" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-endTime" class="form-label">End Time</label>
+                            <input type="datetime-local" class="form-control" id="edit-endTime" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="update-slot-btn">Update Slot</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes View Modal (custom lightweight) -->
+    <style>
+      .notes-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: none; align-items: center; justify-content: center; z-index: 2000; }
+      .notes-modal { background: #fff; border-radius: 10px; max-width: 520px; width: 92%; box-shadow: 0 10px 30px rgba(0,0,0,.2); }
+      .notes-modal-header { padding: 12px 16px; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; }
+      .notes-modal-body { padding: 16px; }
+      .notes-close { border: none; background: #dc3545; color: #fff; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
+      .notes-text { white-space: pre-wrap; word-break: break-word; }
+    </style>
+    <div class="notes-modal-backdrop" id="notesModal" aria-hidden="true">
+      <div class="notes-modal" role="dialog" aria-modal="true" aria-labelledby="notesModalTitle">
+        <div class="notes-modal-header">
+          <strong id="notesModalTitle">Appointment Notes</strong>
+          <button class="notes-close" id="notesModalClose">Close</button>
+        </div>
+        <div class="notes-modal-body">
+          <div id="notesModalText" class="notes-text"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Admin Notes Modal -->
+<div class="modal fade" id="adminNotesModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Admin Notes</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <textarea id="adminNotesInput" class="form-control" rows="5"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" onclick="deleteAdminNote()">Delete</button>
+        <button type="button" class="btn btn-primary" onclick="saveAdminNote()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script type="module" src="./admin.js" ></script>
+  </body>
+</html>

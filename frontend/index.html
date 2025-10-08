@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AppointmentPro - Choose Your Role</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #4361ee;
+        --secondary: #3f37c9;
+        --accent: #4cc9f0;
+        --light: #f8f9fa;
+        --dark: #212529;
+      }
+
+      body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .card {
+        transition: all 0.3s ease;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .user-card {
+        border-top: 5px solid #4361ee;
+      }
+
+      .admin-card {
+        border-top: 5px solid #f72585;
+      }
+
+      .superadmin-card {
+        border-top: 5px solid #f8961e;
+      }
+
+      .feature-card {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .hero-pattern {
+        background-color: #4361ee;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+    </style>
+  </head>
+  <body class="py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <header class="text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+          Appointment<span class="text-blue-600">Pro</span>
+        </h1>
+        <p class="text-gray-600 max-w-3xl mx-auto">
+          Published on 16 September in Management System, both marketing &
+          social curving. Standards your operating conditions with our products,
+          its share platforms.
+        </p>
+      </header>
+
+      <!-- Role Selection Section -->
+      <section class="mb-20">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">
+          Choose Your Role
+        </h2>
+        <p class="text-center text-gray-600 mb-10 max-w-3xl mx-auto">
+          Select your role to access the appropriate dashboard and features
+        </p>
+
+        <div class="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 gap-8">
+          <!-- User Card -->
+            <div class="card user-card bg-white p-4 sm:p-6 md:p-8">
+            <div class="flex items-center mb-6">
+              <div class="bg-blue-100 p-3 rounded-full mr-4">
+                <i class="fas fa-user text-blue-600 text-2xl"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-gray-800">User</h3>
+            </div>
+            <p class="text-gray-600 mb-6">
+              Book appointments and manage your schedule
+            </p>
+            <ul class="mb-8 space-y-2">
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-blue-600 mr-2"></i>
+                <span>Book appointments easily</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-blue-600 mr-2"></i>
+                <span>Manage your schedule</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-blue-600 mr-2"></i>
+                <span>View appointment history</span>
+              </li>
+            </ul>
+            <a
+              href="user.html"
+              class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition duration-300"
+            >
+              Access User Dashboard
+            </a>
+          </div>
+
+          <!-- Admin Card -->
+          <div class="card admin-card bg-white p-4 sm:p-6 md:p-8">
+            <div class="flex items-center mb-6">
+              <div class="bg-pink-100 p-3 rounded-full mr-4">
+                <i class="fas fa-user-shield text-pink-600 text-2xl"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-gray-800">Admin</h3>
+            </div>
+            <p class="text-gray-600 mb-6">Manage users and appointments</p>
+            <ul class="mb-8 space-y-2">
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-pink-600 mr-2"></i>
+                <span>Manage user accounts</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-pink-600 mr-2"></i>
+                <span>Oversee appointments</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-pink-600 mr-2"></i>
+                <span>Generate reports</span>
+              </li>
+            </ul>
+            <a
+              href="login.html?role=admin"
+              class="block w-full bg-pink-600 text-white text-center py-3 rounded-lg hover:bg-pink-700 transition duration-300"
+            >
+              Access Admin Dashboard
+            </a>
+          </div>
+
+          <!-- Super Admin Card -->
+          <div class="card superadmin-card bg-white p-4 sm:p-6 md:p-8">
+            <div class="flex items-center mb-6">
+              <div class="bg-orange-100 p-3 rounded-full mr-4">
+                <i class="fas fa-crown text-orange-600 text-2xl"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-gray-800">Super Admin</h3>
+            </div>
+            <p class="text-gray-600 mb-6">Full system control and oversight</p>
+            <ul class="mb-8 space-y-2">
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-orange-600 mr-2"></i>
+                <span>Full system access</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-orange-600 mr-2"></i>
+                <span>Manage all users and admins</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-orange-600 mr-2"></i>
+                <span>System configuration</span>
+              </li>
+            </ul>
+           
+ <a
+  href="login.html?role=superadmin"
+  class="block w-full bg-green-800 text-white text-center py-3 rounded-lg hover:bg-green-900 transition duration-300"
+>
+  Access Super Admin Dashboard
+</a>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="mb-16">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">
+          Why Choose AppointmentPro?
+        </h2>
+        <p class="text-center text-gray-600 mb-10 max-w-3xl mx-auto">
+          Just for efficiency responsive to professionals
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="feature-card p-6 text-center">
+            <div
+              class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <i class="fas fa-search text-blue-600 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">
+              Smart Scheduling
+            </h3>
+            <p class="text-gray-600">
+              Intelligent appointment component for optimal time management
+            </p>
+          </div>
+
+          <div class="feature-card p-6 text-center">
+            <div
+              class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <i class="fas fa-users text-green-600 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">
+              Team Collaboration
+            </h3>
+            <p class="text-gray-600">
+              Network with your products team and collaborate efficiently
+            </p>
+          </div>
+
+          <div class="feature-card p-6 text-center">
+            <div
+              class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <i class="fas fa-shield-alt text-purple-600 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">
+              Security & Safety
+            </h3>
+            <p class="text-gray-600">
+              Strategic plan safety with robust security measures
+            </p>
+          </div>
+
+          <div class="feature-card p-6 text-center">
+            <div
+              class="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <i class="fas fa-chart-line text-teal-600 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">
+              Reporting Areas
+            </h3>
+            <p class="text-gray-600">
+              Working presented to consumers with detailed analytics
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="hero-pattern text-white py-8 rounded-lg">
+        <div class="text-center">
+          <p>&copy; 2025 AppointmentPro. All rights reserved.</p>
+          <p class="mt-2">Designed for efficient appointment management</p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // Simple animation for page elements
+      document.addEventListener("DOMContentLoaded", function () {
+        const cards = document.querySelectorAll(".card");
+        const features = document.querySelectorAll(".feature-card");
+
+        // Animate cards on page load
+        setTimeout(() => {
+          cards.forEach((card, index) => {
+            setTimeout(() => {
+              card.style.opacity = 1;
+              card.style.transform = "translateY(0)";
+            }, 200 * index);
+          });
+
+          // Animate features
+          setTimeout(() => {
+            features.forEach((feature, index) => {
+              setTimeout(() => {
+                feature.style.opacity = 1;
+                feature.style.transform = "translateY(0)";
+              }, 150 * index);
+            });
+          }, 600);
+        }, 100);
+
+        // Set initial state for animation
+        cards.forEach((card) => {
+          card.style.opacity = 0;
+          card.style.transform = "translateY(20px)";
+          card.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+        });
+
+        features.forEach((feature) => {
+          feature.style.opacity = 0;
+          feature.style.transform = "translateY(15px)";
+          feature.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+        });
+      });
+    </script>
+  </body>
+</html>
